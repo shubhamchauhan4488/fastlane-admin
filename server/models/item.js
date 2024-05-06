@@ -1,19 +1,21 @@
 import { PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import dynamoDbClient from "../config/db.js";
-import uuidv4 from 'uuidv4';
+import { uuid } from 'uuidv4';
 
 // will interact with db
 export const ItemModel = {
-    createItem: async (params) => {
+    createItem: async ({name, price, quantity}) => {
         console.log('model: createItem')
         // create the command
+        const uid = uuid()
+        console.log('id:', uid)
         const command = new PutCommand({
             TableName: "Items",
             Item: {
-                id: { S: uuidv4() },
-                name: { S: itemData.name },
-                price: { N: itemData.price.toString() },
-                quantity: { N: itemData.quantity.toString() }
+                id: uid,
+                name,
+                price,
+                quantity
             }
           });
         await dynamoDbClient.send(command);
