@@ -22,7 +22,7 @@ function App() {
   console.log('items', items)
   const fetchItems = async () => {
     try {
-      const response = await axios.get('https://effective-space-pancake-r7jqqgxj667hx695-3000.app.github.dev/v1/api/items');
+      const response = await axios.get('http://localhost:3000/v1/api/items');
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -31,7 +31,7 @@ function App() {
 
   const handleAddItem = async () => {
     try {
-      await axios.post('https://effective-space-pancake-r7jqqgxj667hx695-3000.app.github.dev/v1/api/items', {
+      await axios.post('http://localhost:3000/v1/api/items', {
         name: itemName,
         price: parseFloat(itemPrice),
         quantity: parseInt(itemQuantity)
@@ -60,7 +60,11 @@ function App() {
       <div>
         <h2>Existing Items</h2>
         <ul>
-          
+          {items?.length > 0 && items.map(item => (
+            <li key={item.id}>
+              <strong>{item.name}</strong> - ${item.price} ({item.quantity} available)
+            </li>
+          ))}
         </ul>
       </div>
     </div>
