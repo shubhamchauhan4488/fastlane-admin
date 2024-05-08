@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: Item API
+  version: 1.0.0
+  description: API to manage items in inventory
+
+servers:
+  - url: 'http://localhost:3000/api-docs'
+    description: Development server
+
+paths:
+  /items:
+    post:
+      summary: Create a new item
+      description: Creates a new item in the inventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - name
+                - price
+                - quantity
+              properties:
+                id:
+                  type: string
+                  description: Unique identifier for the item
+                name:
+                  type: string
+                  description: Name of the item
+                price:
+                  type: number
+                  format: double
+                  description: Price of the item
+                quantity:
+                  type: integer
+                  description: Quantity of the item in stock
+      responses:
+        '201':
+          description: Resource created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    get:
+      summary: Fetch all items
+      description: Retrieves a list of all items in the inventory
+      responses:
+        '200':
+          description: A list of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /items/{id}:
+    get:
+      summary: Get a single item
+      description: Retrieves details of a specific item by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the item to retrieve
+      responses:
+        '200':
+          description: Details of the item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        quantity:
+          type: integer
