@@ -6,6 +6,13 @@ import itemsRouter from './routes/items.js';
 import indexRouter from './routes/index.js';
 import dotenv from 'dotenv';
 dotenv.config();
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+
+// swagger UI integration
+const swaggerymlDir = `${process.cwd()}/swagger/swagger.yaml`;
+console.log('swaggerymlDir: ', swaggerymlDir)
+const swaggerDocument = YAML.load(swaggerymlDir);
 
 const app = express();
 
@@ -25,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/v1/api', itemsRouter);
 app.use('/', indexRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
